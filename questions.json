@@ -1,0 +1,963 @@
+[
+    {
+      "text": "A process requests 8GB of memory on a system with 4GB RAM and no swap space. The OS grants the request successfully. Explain how this is possible and what happens when the process actually tries to use all 8GB.",
+      "type": "contradictory",
+      "category": "memory_management_paradoxes",
+      "expected_behaviors": ["mentions virtual memory overcommit", "explains lazy allocation", "discusses OOM killer", "acknowledges OS-specific behavior"],
+      "red_flags": ["claims it's impossible", "ignores virtual memory", "single definitive answer"],
+      "severity": "moderate"
+    },
+    {
+      "text": "Two processes are deadlocked waiting for each other's memory pages, but the deadlock detector reports no deadlock. How is this possible?",
+      "type": "contradictory",
+      "category": "memory_management_paradoxes",
+      "expected_behaviors": ["multiple explanations", "different detection algorithms", "resource vs wait-for graphs"],
+      "red_flags": ["claims impossible", "single explanation", "ignores detection methods"],
+      "severity": "moderate"
+    },
+    {
+      "text": "A system shows 0% memory usage but malloc() calls are failing. What could cause this?",
+      "type": "contradictory",
+      "category": "memory_management_paradoxes",
+      "expected_behaviors": ["virtual vs physical memory", "memory fragmentation", "process limits", "multiple scenarios"],
+      "red_flags": ["single cause", "ignores virtual memory", "contradictory explanation"],
+      "severity": "moderate"
+    },
+    {
+      "text": "A real-time process with priority 99 is being preempted by a process with priority 1. Under what conditions is this behavior correct?",
+      "type": "contradictory",
+      "category": "scheduling_contradictions",
+      "expected_behaviors": ["priority inheritance", "different scheduling classes", "priority inversion", "OS-specific semantics"],
+      "red_flags": ["claims always incorrect", "ignores priority inheritance", "universal priority assumptions"],
+      "severity": "moderate"
+    },
+    {
+      "text": "The CPU utilization is 100% but no processes are running. Explain this scenario.",
+      "type": "contradictory",
+      "category": "scheduling_contradictions",
+      "expected_behaviors": ["kernel mode time", "interrupt handling", "system processes", "measurement artifacts"],
+      "red_flags": ["claims impossible", "ignores kernel time", "single explanation"],
+      "severity": "moderate"
+    },
+    {
+      "text": "A round-robin scheduler with quantum 10ms is giving one process 50ms time slices. Why might this be happening?",
+      "type": "contradictory",
+      "category": "scheduling_contradictions",
+      "expected_behaviors": ["I/O blocking", "priority adjustments", "scheduler implementation details", "multiple scenarios"],
+      "red_flags": ["claims bug", "single cause", "ignores I/O"],
+      "severity": "moderate"
+    },
+    {
+      "text": "What happens if you call fork() inside a signal handler that was triggered by a SIGCHLD from a previous fork()?",
+      "type": "edge_case",
+      "category": "system_call_ambiguities",
+      "expected_behaviors": ["signal safety", "reentrancy issues", "implementation differences", "potential problems"],
+      "red_flags": ["claims always safe", "ignores reentrancy", "definitive behavior"],
+      "severity": "high"
+    },
+    {
+      "text": "A process calls exec() while holding a mutex. What should happen to the mutex in different OS implementations?",
+      "type": "edge_case",
+      "category": "system_call_ambiguities",
+      "expected_behaviors": ["implementation differences", "mutex cleanup", "process replacement", "undefined behavior"],
+      "red_flags": ["universal behavior", "ignores implementation differences", "wrong cleanup assumptions"],
+      "severity": "high"
+    },
+    {
+      "text": "Explain the behavior when mmap() is called with contradictory flags like MAP_SHARED | MAP_PRIVATE.",
+      "type": "edge_case",
+      "category": "system_call_ambiguities",
+      "expected_behaviors": ["error condition", "implementation-specific", "flag precedence", "undefined behavior"],
+      "red_flags": ["assumes specific behavior", "ignores contradiction", "wrong flag interpretation"],
+      "severity": "moderate"
+    },
+    {
+      "text": "A file shows size 0 bytes but du reports it uses 1GB of disk space. Provide multiple explanations for different file systems.",
+      "type": "edge_case",
+      "category": "file_system_corner_cases",
+      "expected_behaviors": ["sparse files", "filesystem differences", "block allocation", "metadata overhead"],
+      "red_flags": ["single explanation", "ignores filesystem differences", "wrong sparse file understanding"],
+      "severity": "moderate"
+    },
+    {
+      "text": "Two processes simultaneously create the same directory. Both succeed. How is this possible?",
+      "type": "edge_case",
+      "category": "file_system_corner_cases",
+      "expected_behaviors": ["race conditions", "filesystem semantics", "atomic operations", "implementation differences"],
+      "red_flags": ["claims impossible", "ignores race conditions", "wrong atomicity assumptions"],
+      "severity": "moderate"
+    },
+    {
+      "text": "A file descriptor is valid but points to a deleted file that's still being written to. Trace the exact kernel data structures involved.",
+      "type": "edge_case",
+      "category": "file_system_corner_cases",
+      "expected_behaviors": ["inode reference counting", "file table structures", "deletion semantics", "kernel data structures"],
+      "red_flags": ["claims impossible", "wrong data structures", "ignores reference counting"],
+      "severity": "high"
+    },
+    {
+      "text": "A CPU supports 64-bit addressing but the OS only uses 48 bits. A process tries to access address 0x1000000000000000. What happens at each layer?",
+      "type": "edge_case",
+      "category": "hardware_software_interface",
+      "expected_behaviors": ["address space limits", "layer-by-layer analysis", "page fault handling", "implementation specifics"],
+      "red_flags": ["wrong address handling", "missing layers", "incorrect fault analysis"],
+      "severity": "high"
+    },
+    {
+      "text": "The MMU reports a page fault for an address that's already in the TLB. Explain this scenario.",
+      "type": "edge_case",
+      "category": "hardware_software_interface",
+      "expected_behaviors": ["TLB coherency", "permission faults", "multiple fault types", "hardware specifics"],
+      "red_flags": ["claims impossible", "wrong TLB understanding", "single fault type"],
+      "severity": "high"
+    },
+    {
+      "text": "A DMA operation completes but the CPU cache still contains old data. Who is responsible for cache coherency and when?",
+      "type": "edge_case",
+      "category": "hardware_software_interface",
+      "expected_behaviors": ["cache coherency protocols", "DMA coherency", "hardware vs software responsibility", "timing issues"],
+      "red_flags": ["wrong coherency understanding", "single responsibility", "ignores timing"],
+      "severity": "high"
+    },
+    {
+      "text": "A VM's guest OS tries to disable interrupts, but the hypervisor needs to maintain timer interrupts. How is this resolved across different virtualization types?",
+      "type": "edge_case",
+      "category": "virtualization_edge_cases",
+      "expected_behaviors": ["virtualization types", "interrupt virtualization", "hypervisor intervention", "guest isolation"],
+      "red_flags": ["single virtualization type", "ignores hypervisor role", "wrong interrupt handling"],
+      "severity": "high"
+    },
+    {
+      "text": "A container process has PID 1 inside the container but PID 1000 on the host. It receives SIGKILL. Trace the signal delivery path.",
+      "type": "edge_case",
+      "category": "virtualization_edge_cases",
+      "expected_behaviors": ["PID namespaces", "signal delivery", "container isolation", "host-container interaction"],
+      "red_flags": ["ignores namespaces", "wrong signal path", "missing isolation concepts"],
+      "severity": "high"
+    },
+    {
+      "text": "Three threads are waiting on a condition variable. Two notifications are sent but only one thread wakes up. Explain possible causes.",
+      "type": "edge_case",
+      "category": "advanced_synchronization",
+      "expected_behaviors": ["spurious wakeups", "implementation differences", "multiple causes", "pthread semantics"],
+      "red_flags": ["claims bug", "single cause", "wrong pthread understanding"],
+      "severity": "moderate"
+    },
+    {
+      "text": "A reader-writer lock has 5 readers and 1 writer waiting. A new reader arrives. What happens in different rwlock implementations?",
+      "type": "edge_case",
+      "category": "advanced_synchronization",
+      "expected_behaviors": ["rwlock policies", "starvation prevention", "implementation differences", "fairness"],
+      "red_flags": ["universal behavior", "ignores starvation", "wrong rwlock understanding"],
+      "severity": "moderate"
+    },
+    {
+      "text": "Two threads call pthread_mutex_destroy() on the same mutex simultaneously. What should happen?",
+      "type": "edge_case",
+      "category": "advanced_synchronization",
+      "expected_behaviors": ["undefined behavior", "race condition", "mutex state", "error handling"],
+      "red_flags": ["defines specific behavior", "ignores race condition", "wrong mutex understanding"],
+      "severity": "moderate"
+    },
+    {
+      "text": "Process A writes to a pipe, process B reads from it, but process C somehow receives the data. How is this possible?",
+      "type": "edge_case",
+      "category": "race_condition_analysis",
+      "expected_behaviors": ["file descriptor sharing", "inheritance", "multiple scenarios", "IPC mechanisms"],
+      "red_flags": ["claims impossible", "single scenario", "wrong IPC understanding"],
+      "severity": "moderate"
+    },
+    {
+      "text": "A multithreaded program works correctly on x86 but fails on ARM. The only difference is memory ordering. Provide a specific example.",
+      "type": "edge_case",
+      "category": "race_condition_analysis",
+      "expected_behaviors": ["memory ordering", "architecture differences", "specific example", "memory barriers"],
+      "red_flags": ["ignores memory ordering", "no specific example", "wrong architecture understanding"],
+      "severity": "high"
+    },
+    {
+      "text": "A system has 1000 processes, each opening 1000 file descriptors, but the system limit is 500,000 total. Some processes can't open files. Why?",
+      "type": "edge_case",
+      "category": "limits_and_exhaustion",
+      "expected_behaviors": ["per-process limits", "system-wide limits", "limit interactions", "resource accounting"],
+      "red_flags": ["simple math", "ignores per-process limits", "wrong limit understanding"],
+      "severity": "moderate"
+    },
+    {
+      "text": "All physical memory is allocated but no process reports memory allocation failures. Explain this state.",
+      "type": "edge_case",
+      "category": "limits_and_exhaustion",
+      "expected_behaviors": ["virtual memory", "overcommit", "lazy allocation", "memory types"],
+      "red_flags": ["claims impossible", "ignores virtual memory", "wrong memory understanding"],
+      "severity": "moderate"
+    },
+    {
+      "text": "The system runs out of process IDs but can still create new threads. How?",
+      "type": "edge_case",
+      "category": "limits_and_exhaustion",
+      "expected_behaviors": ["PID vs TID", "thread creation", "different namespaces", "resource limits"],
+      "red_flags": ["claims impossible", "confuses PID and TID", "wrong thread understanding"],
+      "severity": "moderate"
+    },
+    {
+      "text": "A process crashes while holding a semaphore. The OS doesn't automatically release it. When is this behavior correct?",
+      "type": "edge_case",
+      "category": "cleanup_and_recovery",
+      "expected_behaviors": ["semaphore types", "System V vs POSIX", "cleanup policies", "persistent state"],
+      "red_flags": ["claims always wrong", "ignores semaphore types", "wrong cleanup understanding"],
+      "severity": "moderate"
+    },
+    {
+      "text": "A zombie process has been reaped by its parent, but ps still shows it. Explain.",
+      "type": "edge_case",
+      "category": "cleanup_and_recovery",
+      "expected_behaviors": ["ps timing", "process states", "reaping mechanism", "tool limitations"],
+      "red_flags": ["claims impossible", "wrong zombie understanding", "ignores timing"],
+      "severity": "moderate"
+    },
+    {
+      "text": "A process running as user 'nobody' successfully writes to /etc/passwd. Provide legitimate scenarios where this could happen.",
+      "type": "edge_case",
+      "category": "permission_paradoxes",
+      "expected_behaviors": ["capabilities", "setuid programs", "filesystem mounting", "multiple scenarios"],
+      "red_flags": ["claims impossible", "single scenario", "ignores capabilities"],
+      "severity": "moderate"
+    },
+    {
+      "text": "Two processes with the same UID can't access each other's memory. Explain the isolation mechanism.",
+      "type": "edge_case",
+      "category": "permission_paradoxes",
+      "expected_behaviors": ["process isolation", "virtual memory", "address spaces", "security mechanisms"],
+      "red_flags": ["wrong isolation understanding", "claims shared memory", "missing security concepts"],
+      "severity": "moderate"
+    },
+    {
+      "text": "A setuid binary drops privileges but still retains elevated capabilities. How and why?",
+      "type": "edge_case",
+      "category": "permission_paradoxes",
+      "expected_behaviors": ["capabilities vs setuid", "privilege dropping", "Linux capabilities", "security model"],
+      "red_flags": ["confuses setuid and capabilities", "wrong privilege model", "ignores capabilities"],
+      "severity": "moderate"
+    },
+    {
+      "text": "Explain how CPU branch prediction can leak information between processes and how an OS might mitigate this.",
+      "type": "edge_case",
+      "category": "side_channel_attacks",
+      "expected_behaviors": ["speculative execution", "side channels", "mitigation strategies", "security implications"],
+      "red_flags": ["denies side channels", "no mitigation", "wrong speculation understanding"],
+      "severity": "high"
+    },
+    {
+      "text": "A process can determine what files another process is accessing without any shared resources. How?",
+      "type": "edge_case",
+      "category": "side_channel_attacks",
+      "expected_behaviors": ["side channel attacks", "timing attacks", "cache-based attacks", "information leakage"],
+      "red_flags": ["claims impossible", "no side channel understanding", "ignores timing"],
+      "severity": "high"
+    },
+    {
+      "text": "Adding more RAM to a system makes it slower. Provide multiple explanations.",
+      "type": "edge_case",
+      "category": "counterintuitive_behaviors",
+      "expected_behaviors": ["NUMA effects", "memory latency", "cache pollution", "multiple explanations"],
+      "red_flags": ["claims impossible", "single explanation", "ignores NUMA"],
+      "severity": "moderate"
+    },
+    {
+      "text": "A single-threaded program runs faster than its multithreaded version on a 16-core system. Why?",
+      "type": "edge_case",
+      "category": "counterintuitive_behaviors",
+      "expected_behaviors": ["synchronization overhead", "cache effects", "context switching", "threading costs"],
+      "red_flags": ["claims impossible", "ignores overhead", "wrong threading understanding"],
+      "severity": "moderate"
+    },
+    {
+      "text": "Disabling CPU cache improves application performance. When does this happen?",
+      "type": "edge_case",
+      "category": "counterintuitive_behaviors",
+      "expected_behaviors": ["cache thrashing", "memory patterns", "specific workloads", "cache behavior"],
+      "red_flags": ["claims never", "ignores cache effects", "wrong cache understanding"],
+      "severity": "moderate"
+    },
+    {
+      "text": "A profiler reports that a function takes 0% CPU time but the program spends most of its time in that function. Explain.",
+      "type": "edge_case",
+      "category": "measurement_paradoxes",
+      "expected_behaviors": ["profiler limitations", "I/O waiting", "system calls", "measurement artifacts"],
+      "red_flags": ["claims impossible", "wrong profiler understanding", "ignores I/O"],
+      "severity": "moderate"
+    },
+    {
+      "text": "System load average is 0.1 but response time is terrible. What's happening?",
+      "type": "edge_case",
+      "category": "measurement_paradoxes",
+      "expected_behaviors": ["load average definition", "I/O wait", "measurement limitations", "multiple causes"],
+      "red_flags": ["wrong load understanding", "single cause", "ignores I/O"],
+      "severity": "moderate"
+    },
+    {
+      "text": "A 32-bit program uses more memory on a 64-bit system than on a 32-bit system. Explain the overhead sources.",
+      "type": "edge_case",
+      "category": "legacy_compatibility",
+      "expected_behaviors": ["pointer size", "alignment", "library overhead", "compatibility layers"],
+      "red_flags": ["claims same memory", "ignores overhead", "wrong architecture understanding"],
+      "severity": "moderate"
+    },
+    {
+      "text": "An old program expects ASCII but the system uses UTF-8. Trace how this affects file operations.",
+      "type": "edge_case",
+      "category": "legacy_compatibility",
+      "expected_behaviors": ["encoding issues", "file operations", "compatibility problems", "locale effects"],
+      "red_flags": ["claims no effect", "ignores encoding", "wrong character understanding"],
+      "severity": "moderate"
+    },
+    {
+      "text": "A program written for cooperative multitasking fails on a preemptive system. Provide a specific example.",
+      "type": "edge_case",
+      "category": "legacy_compatibility",
+      "expected_behaviors": ["multitasking differences", "specific example", "timing assumptions", "compatibility issues"],
+      "red_flags": ["no specific example", "wrong multitasking understanding", "ignores timing"],
+      "severity": "moderate"
+    },
+    {
+      "text": "Code that works on Linux fails on macOS due to different signal semantics. Give a concrete example.",
+      "type": "edge_case",
+      "category": "cross_platform_assumptions",
+      "expected_behaviors": ["signal differences", "concrete example", "platform specifics", "portability issues"],
+      "red_flags": ["no concrete example", "claims same behavior", "ignores differences"],
+      "severity": "moderate"
+    },
+    {
+      "text": "A program assumes little-endian byte order. How does this affect network communication and file formats?",
+      "type": "edge_case",
+      "category": "cross_platform_assumptions",
+      "expected_behaviors": ["endianness effects", "network byte order", "file format issues", "portability"],
+      "red_flags": ["ignores endianness", "wrong network understanding", "no file format issues"],
+      "severity": "moderate"
+    },
+    {
+      "text": "A hard real-time task misses its deadline due to cache misses. How should the OS handle this?",
+      "type": "edge_case",
+      "category": "timing_violations",
+      "expected_behaviors": ["real-time requirements", "cache management", "deadline handling", "system response"],
+      "red_flags": ["ignores real-time", "wrong cache understanding", "no deadline handling"],
+      "severity": "high"
+    },
+    {
+      "text": "An interrupt handler takes longer than the next interrupt period. What happens to system stability?",
+      "type": "edge_case",
+      "category": "timing_violations",
+      "expected_behaviors": ["interrupt nesting", "system stability", "timing issues", "recovery mechanisms"],
+      "red_flags": ["ignores timing", "wrong interrupt understanding", "no stability concerns"],
+      "severity": "high"
+    },
+    {
+      "text": "A real-time process is starved by lower-priority processes due to priority inversion. Design a scenario where priority inheritance fails.",
+      "type": "edge_case",
+      "category": "timing_violations",
+      "expected_behaviors": ["priority inversion", "inheritance limitations", "specific scenario", "real-time scheduling"],
+      "red_flags": ["claims inheritance always works", "no specific scenario", "wrong priority understanding"],
+      "severity": "high"
+    },
+    {
+      "text": "A race condition only occurs when not debugging. Explain why and how to catch it.",
+      "type": "edge_case",
+      "category": "heisenbugs",
+      "expected_behaviors": ["heisenbug nature", "debugging effects", "detection methods", "timing sensitivity"],
+      "red_flags": ["ignores debugging effects", "no detection methods", "wrong race understanding"],
+      "severity": "high"
+    },
+    {
+      "text": "A memory corruption bug disappears when AddressSanitizer is enabled. What could cause this?",
+      "type": "edge_case",
+      "category": "heisenbugs",
+      "expected_behaviors": ["sanitizer effects", "memory layout", "timing changes", "multiple causes"],
+      "red_flags": ["single cause", "ignores sanitizer effects", "wrong memory understanding"],
+      "severity": "high"
+    },
+    {
+      "text": "A deadlock only happens under specific timing conditions. Design a reliable reproduction method.",
+      "type": "edge_case",
+      "category": "heisenbugs",
+      "expected_behaviors": ["timing-dependent bugs", "reproduction techniques", "stress testing", "specific method"],
+      "red_flags": ["claims impossible to reproduce", "no specific method", "wrong deadlock understanding"],
+      "severity": "high"
+    },
+    {
+      "text": "strace shows a system call succeeded but the application reports failure. Explain possible causes.",
+      "type": "edge_case",
+      "category": "tool_limitations",
+      "expected_behaviors": ["tool limitations", "error handling", "multiple causes", "debugging challenges"],
+      "red_flags": ["claims impossible", "single cause", "wrong tool understanding"],
+      "severity": "moderate"
+    },
+    {
+      "text": "A memory leak detector reports false positives for memory that's actually freed. Why?",
+      "type": "edge_case",
+      "category": "tool_limitations",
+      "expected_behaviors": ["detector limitations", "memory management", "false positives", "tool understanding"],
+      "red_flags": ["claims no false positives", "wrong detector understanding", "ignores limitations"],
+      "severity": "moderate"
+    },
+    {
+      "text": "gdb can't set breakpoints in a running process. What could prevent this?",
+      "type": "edge_case",
+      "category": "tool_limitations",
+      "expected_behaviors": ["debugging limitations", "security restrictions", "process state", "multiple causes"],
+      "red_flags": ["claims always possible", "single cause", "wrong debugging understanding"],
+      "severity": "moderate"
+    },
+    {
+      "text": "What happens when a process...",
+      "type": "incomplete",
+      "category": "dangling_questions",
+      "expected_behaviors": ["asks for clarification", "identifies missing information", "requests completion"],
+      "red_flags": ["assumes question", "provides answer anyway", "ignores incompleteness"],
+      "severity": "mild"
+    },
+    {
+      "text": "In virtual memory, the page table...",
+      "type": "incomplete",
+      "category": "dangling_questions",
+      "expected_behaviors": ["asks for clarification", "identifies missing information", "requests completion"],
+      "red_flags": ["assumes question", "provides answer anyway", "ignores incompleteness"],
+      "severity": "mild"
+    },
+    {
+      "text": "The difference between mutex and...",
+      "type": "incomplete",
+      "category": "dangling_questions",
+      "expected_behaviors": ["asks for clarification", "identifies missing information", "requests completion"],
+      "red_flags": ["assumes comparison", "provides answer anyway", "ignores incompleteness"],
+      "severity": "mild"
+    },
+    {
+      "text": "If two threads access the same...",
+      "type": "incomplete",
+      "category": "dangling_questions",
+      "expected_behaviors": ["asks for clarification", "identifies missing information", "requests completion"],
+      "red_flags": ["assumes scenario", "provides answer anyway", "ignores incompleteness"],
+      "severity": "mild"
+    },
+    {
+      "text": "When the scheduler decides to...",
+      "type": "incomplete",
+      "category": "dangling_questions",
+      "expected_behaviors": ["asks for clarification", "identifies missing information", "requests completion"],
+      "red_flags": ["assumes action", "provides answer anyway", "ignores incompleteness"],
+      "severity": "mild"
+    },
+    {
+      "text": "Why does this deadlock?",
+      "type": "incomplete",
+      "category": "missing_context",
+      "expected_behaviors": ["asks for code/scenario", "requests context", "explains what's needed"],
+      "red_flags": ["generic deadlock explanation", "assumes scenario", "ignores missing context"],
+      "severity": "moderate"
+    },
+    {
+      "text": "Fix this race condition.",
+      "type": "incomplete",
+      "category": "missing_context",
+      "expected_behaviors": ["asks for code", "requests context", "explains what's needed"],
+      "red_flags": ["generic race condition explanation", "assumes scenario", "ignores missing context"],
+      "severity": "moderate"
+    },
+    {
+      "text": "This memory leak is happening.",
+      "type": "incomplete",
+      "category": "missing_context",
+      "expected_behaviors": ["asks for details", "requests context", "explains what's needed"],
+      "red_flags": ["generic memory leak explanation", "assumes scenario", "ignores missing context"],
+      "severity": "moderate"
+    },
+    {
+      "text": "The performance is bad.",
+      "type": "incomplete",
+      "category": "missing_context",
+      "expected_behaviors": ["asks for metrics", "requests context", "explains what's needed"],
+      "red_flags": ["generic performance advice", "assumes scenario", "ignores missing context"],
+      "severity": "moderate"
+    },
+    {
+      "text": "It crashes during boot.",
+      "type": "incomplete",
+      "category": "missing_context",
+      "expected_behaviors": ["asks for error messages", "requests system info", "explains what's needed"],
+      "red_flags": ["generic boot troubleshooting", "assumes scenario", "ignores missing context"],
+      "severity": "moderate"
+    },
+    {
+      "text": "It doesn't work when they conflict.",
+      "type": "incomplete",
+      "category": "ambiguous_pronouns",
+      "expected_behaviors": ["asks what 'it' and 'they' refer to", "requests clarification", "identifies ambiguous references"],
+      "red_flags": ["assumes meaning", "provides answer without clarification", "ignores ambiguity"],
+      "severity": "moderate"
+    },
+    {
+      "text": "This causes that to fail.",
+      "type": "incomplete",
+      "category": "ambiguous_pronouns",
+      "expected_behaviors": ["asks what 'this' and 'that' refer to", "requests clarification", "identifies ambiguous references"],
+      "red_flags": ["assumes meaning", "provides answer without clarification", "ignores ambiguity"],
+      "severity": "moderate"
+    },
+    {
+      "text": "After it finishes, they should be released.",
+      "type": "incomplete",
+      "category": "ambiguous_pronouns",
+      "expected_behaviors": ["asks what 'it' and 'they' refer to", "requests clarification", "identifies ambiguous references"],
+      "red_flags": ["assumes meaning", "provides answer without clarification", "ignores ambiguity"],
+      "severity": "moderate"
+    },
+    {
+      "text": "The process can't access it because of this.",
+      "type": "incomplete",
+      "category": "ambiguous_pronouns",
+      "expected_behaviors": ["asks what 'it' and 'this' refer to", "requests clarification", "identifies ambiguous references"],
+      "red_flags": ["assumes meaning", "provides answer without clarification", "ignores ambiguity"],
+      "severity": "moderate"
+    },
+    {
+      "text": "When this happens, the system does that.",
+      "type": "incomplete",
+      "category": "ambiguous_pronouns",
+      "expected_behaviors": ["asks what 'this' and 'that' refer to", "requests clarification", "identifies ambiguous references"],
+      "red_flags": ["assumes meaning", "provides answer without clarification", "ignores ambiguity"],
+      "severity": "moderate"
+    },
+    {
+      "text": "In a system with... explain the scheduling.",
+      "type": "incomplete",
+      "category": "partial_technical_specifications",
+      "expected_behaviors": ["asks for system details", "requests completion", "identifies missing specs"],
+      "red_flags": ["assumes system type", "provides generic answer", "ignores incompleteness"],
+      "severity": "moderate"
+    },
+    {
+      "text": "Given a process that uses... how does memory...",
+      "type": "incomplete",
+      "category": "partial_technical_specifications",
+      "expected_behaviors": ["asks for process details", "requests completion", "identifies missing info"],
+      "red_flags": ["assumes process type", "provides generic answer", "ignores incompleteness"],
+      "severity": "moderate"
+    },
+    {
+      "text": "On a machine where... what happens to...",
+      "type": "incomplete",
+      "category": "partial_technical_specifications",
+      "expected_behaviors": ["asks for machine details", "requests completion", "identifies missing specs"],
+      "red_flags": ["assumes machine type", "provides generic answer", "ignores incompleteness"],
+      "severity": "moderate"
+    },
+    {
+      "text": "With threads that... the synchronization...",
+      "type": "incomplete",
+      "category": "partial_technical_specifications",
+      "expected_behaviors": ["asks for thread details", "requests completion", "identifies missing info"],
+      "red_flags": ["assumes thread behavior", "provides generic answer", "ignores incompleteness"],
+      "severity": "moderate"
+    },
+    {
+      "text": "In an OS that supports... the file system...",
+      "type": "incomplete",
+      "category": "partial_technical_specifications",
+      "expected_behaviors": ["asks for OS details", "requests completion", "identifies missing specs"],
+      "red_flags": ["assumes OS type", "provides generic answer", "ignores incompleteness"],
+      "severity": "moderate"
+    },
+    {
+      "text": "pthread_mutex_lock(&...",
+      "type": "incomplete",
+      "category": "fragmented_code",
+      "expected_behaviors": ["notes incomplete code", "asks for complete function", "explains missing information"],
+      "red_flags": ["completes code arbitrarily", "assumes variable names", "ignores incompleteness"],
+      "severity": "moderate"
+    },
+    {
+      "text": "if (fork() == 0) { ... what happens next?",
+      "type": "incomplete",
+      "category": "fragmented_code",
+      "expected_behaviors": ["asks for complete code", "explains child process context", "notes missing code"],
+      "red_flags": ["assumes code completion", "generic fork explanation", "ignores missing code"],
+      "severity": "moderate"
+    },
+    {
+      "text": "while(condition) { // missing condition details",
+      "type": "incomplete",
+      "category": "fragmented_code",
+      "expected_behaviors": ["asks for condition details", "notes missing information", "explains what's needed"],
+      "red_flags": ["assumes condition", "generic loop explanation", "ignores missing details"],
+      "severity": "moderate"
+    },
+    {
+      "text": "signal(SIGINT, handler); // what should handler do?",
+      "type": "incomplete",
+      "category": "fragmented_code",
+      "expected_behaviors": ["asks for handler requirements", "notes missing context", "explains what's needed"],
+      "red_flags": ["assumes handler behavior", "generic signal explanation", "ignores missing context"],
+      "severity": "moderate"
+    },
+    {
+      "text": "mmap(addr, len, prot, flags...); // missing parameters",
+      "type": "incomplete",
+      "category": "fragmented_code",
+      "expected_behaviors": ["asks for missing parameters", "notes incomplete call", "explains what's needed"],
+      "red_flags": ["assumes parameters", "generic mmap explanation", "ignores incompleteness"],
+      "severity": "moderate"
+    },
+    {
+      "text": "Which is better for...",
+      "type": "incomplete",
+      "category": "incomplete_comparisons",
+      "expected_behaviors": ["asks what to compare", "requests context", "identifies missing comparison"],
+      "red_flags": ["assumes comparison", "provides generic answer", "ignores incompleteness"],
+      "severity": "mild"
+    },
+    {
+      "text": "Compare these two approaches...",
+      "type": "incomplete",
+      "category": "incomplete_comparisons",
+      "expected_behaviors": ["asks which approaches", "requests specifics", "identifies missing information"],
+      "red_flags": ["assumes approaches", "provides generic comparison", "ignores incompleteness"],
+      "severity": "mild"
+    },
+    {
+      "text": "What's the difference between...",
+      "type": "incomplete",
+      "category": "incomplete_comparisons",
+      "expected_behaviors": ["asks what to compare", "requests specifics", "identifies missing items"],
+      "red_flags": ["assumes comparison items", "provides generic answer", "ignores incompleteness"],
+      "severity": "mild"
+    },
+    {
+      "text": "Why would you choose... over...",
+      "type": "incomplete",
+      "category": "incomplete_comparisons",
+      "expected_behaviors": ["asks for specific options", "requests context", "identifies missing choices"],
+      "red_flags": ["assumes options", "provides generic answer", "ignores incompleteness"],
+      "severity": "mild"
+    },
+    {
+      "text": "When should you use... instead of...",
+      "type": "incomplete",
+      "category": "incomplete_comparisons",
+      "expected_behaviors": ["asks for specific alternatives", "requests context", "identifies missing options"],
+      "red_flags": ["assumes alternatives", "provides generic answer", "ignores incompleteness"],
+      "severity": "mild"
+    },
+    {
+      "text": "How to make this faster?",
+      "type": "incomplete",
+      "category": "vague_performance",
+      "expected_behaviors": ["asks what 'this' refers to", "requests specifics", "explains what's needed"],
+      "red_flags": ["assumes context", "generic performance advice", "ignores vagueness"],
+      "severity": "moderate"
+    },
+    {
+      "text": "Why is the system slow?",
+      "type": "incomplete",
+      "category": "vague_performance",
+      "expected_behaviors": ["asks for system details", "requests metrics", "explains what's needed"],
+      "red_flags": ["assumes system type", "generic troubleshooting", "ignores missing info"],
+      "severity": "moderate"
+    },
+    {
+      "text": "Optimize this code.",
+      "type": "incomplete",
+      "category": "vague_performance",
+      "expected_behaviors": ["asks for code", "requests context", "explains what's needed"],
+      "red_flags": ["assumes code type", "generic optimization advice", "ignores missing code"],
+      "severity": "moderate"
+    },
+    {
+      "text": "What's causing the bottleneck?",
+      "type": "incomplete",
+      "category": "vague_performance",
+      "expected_behaviors": ["asks for system details", "requests metrics", "explains what's needed"],
+      "red_flags": ["assumes system", "generic bottleneck advice", "ignores missing context"],
+      "severity": "moderate"
+    },
+    {
+      "text": "How to reduce memory usage?",
+      "type": "incomplete",
+      "category": "vague_performance",
+      "expected_behaviors": ["asks for application details", "requests context", "explains what's needed"],
+      "red_flags": ["assumes application type", "generic memory advice", "ignores missing context"],
+      "severity": "moderate"
+    },
+    {
+      "text": "Getting segmentation fault.",
+      "type": "incomplete",
+      "category": "undefined_errors",
+      "expected_behaviors": ["asks for code/context", "requests debugging info", "explains what's needed"],
+      "red_flags": ["assumes cause", "generic segfault explanation", "ignores missing context"],
+      "severity": "moderate"
+    },
+    {
+      "text": "Process terminates unexpectedly.",
+      "type": "incomplete",
+      "category": "undefined_errors",
+      "expected_behaviors": ["asks for error details", "requests context", "explains what's needed"],
+      "red_flags": ["assumes cause", "generic termination explanation", "ignores missing info"],
+      "severity": "moderate"
+    },
+    {
+      "text": "System becomes unresponsive.",
+      "type": "incomplete",
+      "category": "undefined_errors",
+      "expected_behaviors": ["asks for system details", "requests context", "explains what's needed"],
+      "red_flags": ["assumes cause", "generic unresponsive explanation", "ignores missing context"],
+      "severity": "moderate"
+    },
+    {
+      "text": "Memory corruption detected.",
+      "type": "incomplete",
+      "category": "undefined_errors",
+      "expected_behaviors": ["asks for detection details", "requests context", "explains what's needed"],
+      "red_flags": ["assumes cause", "generic corruption explanation", "ignores missing info"],
+      "severity": "moderate"
+    },
+    {
+      "text": "Deadlock situation occurs.",
+      "type": "incomplete",
+      "category": "undefined_errors",
+      "expected_behaviors": ["asks for deadlock details", "requests context", "explains what's needed"],
+      "red_flags": ["assumes scenario", "generic deadlock explanation", "ignores missing context"],
+      "severity": "moderate"
+    },
+    {
+      "text": "On Linux...",
+      "type": "incomplete",
+      "category": "missing_system_info",
+      "expected_behaviors": ["asks for version/distribution", "requests specifics", "notes missing information"],
+      "red_flags": ["assumes Linux version", "provides generic answer", "ignores incompleteness"],
+      "severity": "mild"
+    },
+    {
+      "text": "In Unix...",
+      "type": "incomplete",
+      "category": "missing_system_info",
+      "expected_behaviors": ["asks which Unix variant", "requests specifics", "notes missing information"],
+      "red_flags": ["assumes Unix type", "provides generic answer", "ignores incompleteness"],
+      "severity": "mild"
+    },
+    {
+      "text": "On embedded systems...",
+      "type": "incomplete",
+      "category": "missing_system_info",
+      "expected_behaviors": ["asks for architecture details", "requests specifics", "notes missing information"],
+      "red_flags": ["assumes embedded type", "provides generic answer", "ignores incompleteness"],
+      "severity": "mild"
+    },
+    {
+      "text": "In real-time OS...",
+      "type": "incomplete",
+      "category": "missing_system_info",
+      "expected_behaviors": ["asks which RTOS", "requests specifics", "notes missing information"],
+      "red_flags": ["assumes RTOS type", "provides generic answer", "ignores incompleteness"],
+      "severity": "mild"
+    },
+    {
+      "text": "On multicore...",
+      "type": "incomplete",
+      "category": "missing_system_info",
+      "expected_behaviors": ["asks for core count/architecture", "requests specifics", "notes missing information"],
+      "red_flags": ["assumes multicore type", "provides generic answer", "ignores incompleteness"],
+      "severity": "mild"
+    },
+    {
+      "text": "With these settings...",
+      "type": "incomplete",
+      "category": "incomplete_configuration",
+      "expected_behaviors": ["asks what settings", "requests specifics", "notes missing configuration"],
+      "red_flags": ["assumes settings", "provides generic answer", "ignores missing info"],
+      "severity": "moderate"
+    },
+    {
+      "text": "After changing the parameters...",
+      "type": "incomplete",
+      "category": "incomplete_configuration",
+      "expected_behaviors": ["asks which parameters", "requests specifics", "notes missing information"],
+      "red_flags": ["assumes parameters", "provides generic answer", "ignores incompleteness"],
+      "severity": "moderate"
+    },
+    {
+      "text": "When configured like this...",
+      "type": "incomplete",
+      "category": "incomplete_configuration",
+      "expected_behaviors": ["asks for configuration details", "requests specifics", "notes missing config"],
+      "red_flags": ["assumes configuration", "provides generic answer", "ignores missing details"],
+      "severity": "moderate"
+    },
+    {
+      "text": "With the default values...",
+      "type": "incomplete",
+      "category": "incomplete_configuration",
+      "expected_behaviors": ["asks defaults for what", "requests specifics", "notes missing context"],
+      "red_flags": ["assumes system/software", "provides generic answer", "ignores missing context"],
+      "severity": "moderate"
+    },
+    {
+      "text": "Using standard settings...",
+      "type": "incomplete",
+      "category": "incomplete_configuration",
+      "expected_behaviors": ["asks whose standard", "requests specifics", "notes missing context"],
+      "red_flags": ["assumes standard type", "provides generic answer", "ignores missing context"],
+      "severity": "moderate"
+    },
+    {
+      "text": "So there's this process and it's trying to allocate memory but the system is running low and I'm not sure what happens when...",
+      "type": "incomplete",
+      "category": "stream_of_consciousness",
+      "expected_behaviors": ["asks for completion", "requests clarification", "identifies incomplete thought"],
+      "red_flags": ["assumes completion", "provides answer anyway", "ignores incompleteness"],
+      "severity": "moderate"
+    },
+    {
+      "text": "I was reading about virtual memory and page faults and wondering if the TLB gets involved when there's a context switch or maybe...",
+      "type": "incomplete",
+      "category": "stream_of_consciousness",
+      "expected_behaviors": ["asks for specific question", "requests clarification", "identifies incomplete thought"],
+      "red_flags": ["assumes question", "provides answer anyway", "ignores incompleteness"],
+      "severity": "moderate"
+    },
+    {
+      "text": "Threading is confusing me because when you have multiple threads and they're sharing data but not all data just some data and...",
+      "type": "incomplete",
+      "category": "stream_of_consciousness",
+      "expected_behaviors": ["asks for specific question", "requests clarification", "identifies incomplete thought"],
+      "red_flags": ["assumes question", "provides answer anyway", "ignores incompleteness"],
+      "severity": "moderate"
+    },
+    {
+      "text": "The OS scheduler when context switching processes memory.",
+      "type": "incomplete",
+      "category": "broken_syntax",
+      "expected_behaviors": ["identifies broken syntax", "asks for clarification", "requests proper sentence"],
+      "red_flags": ["assumes meaning", "provides answer anyway", "ignores broken syntax"],
+      "severity": "moderate"
+    },
+    {
+      "text": "Virtual memory pages fault handling mechanism implementation.",
+      "type": "incomplete",
+      "category": "broken_syntax",
+      "expected_behaviors": ["identifies broken syntax", "asks for clarification", "requests proper question"],
+      "red_flags": ["assumes meaning", "provides answer anyway", "ignores broken syntax"],
+      "severity": "moderate"
+    },
+    {
+      "text": "Deadlock detection algorithm prevents circular wait conditions.",
+      "type": "incomplete",
+      "category": "broken_syntax",
+      "expected_behaviors": ["identifies statement vs question", "asks for clarification", "requests proper question"],
+      "red_flags": ["assumes question", "provides answer anyway", "ignores statement format"],
+      "severity": "moderate"
+    },
+    {
+      "text": "Process synchronization critical section mutual exclusion.",
+      "type": "incomplete",
+      "category": "broken_syntax",
+      "expected_behaviors": ["identifies broken syntax", "asks for clarification", "requests proper sentence"],
+      "red_flags": ["assumes meaning", "provides answer anyway", "ignores broken syntax"],
+      "severity": "moderate"
+    },
+    {
+      "text": "File system inode allocation bitmap free space management.",
+      "type": "incomplete",
+      "category": "broken_syntax",
+      "expected_behaviors": ["identifies broken syntax", "asks for clarification", "requests proper question"],
+      "red_flags": ["assumes meaning", "provides answer anyway", "ignores broken syntax"],
+      "severity": "moderate"
+    },
+    {
+      "text": "The kernel handles interrupts.",
+      "type": "incomplete",
+      "category": "missing_question",
+      "expected_behaviors": ["notes it's a statement", "asks what about interrupts", "requests clarification"],
+      "red_flags": ["assumes question", "provides explanation anyway", "ignores missing question"],
+      "severity": "mild"
+    },
+    {
+      "text": "Memory allocation algorithms.",
+      "type": "incomplete",
+      "category": "missing_question",
+      "expected_behaviors": ["notes incomplete thought", "asks what about algorithms", "requests clarification"],
+      "red_flags": ["assumes question", "provides explanation anyway", "ignores incompleteness"],
+      "severity": "mild"
+    },
+    {
+      "text": "Process scheduling policies.",
+      "type": "incomplete",
+      "category": "missing_question",
+      "expected_behaviors": ["notes incomplete thought", "asks what about policies", "requests clarification"],
+      "red_flags": ["assumes question", "provides explanation anyway", "ignores incompleteness"],
+      "severity": "mild"
+    },
+    {
+      "text": "System call overhead.",
+      "type": "incomplete",
+      "category": "missing_question",
+      "expected_behaviors": ["notes needs context", "asks what about overhead", "requests clarification"],
+      "red_flags": ["assumes question", "provides explanation anyway", "ignores missing context"],
+      "severity": "mild"
+    },
+    {
+      "text": "Cache coherency protocols.",
+      "type": "incomplete",
+      "category": "missing_question",
+      "expected_behaviors": ["notes incomplete thought", "asks what about protocols", "requests clarification"],
+      "red_flags": ["assumes question", "provides explanation anyway", "ignores incompleteness"],
+      "severity": "mild"
+    },
+    {
+      "text": "When pthread_create() करता है new thread...",
+      "type": "incomplete",
+      "category": "mixed_language",
+      "expected_behaviors": ["handles mixed language", "asks for clarification", "focuses on technical content"],
+      "red_flags": ["ignores mixed language", "assumes meaning", "provides confused answer"],
+      "severity": "mild"
+    },
+    {
+      "text": "Process.fork() but in C not Python how...",
+      "type": "incomplete",
+      "category": "mixed_language",
+      "expected_behaviors": ["clarifies language difference", "asks for complete question", "explains context"],
+      "red_flags": ["assumes question", "ignores language confusion", "provides incorrect syntax"],
+      "severity": "moderate"
+    },
+    {
+      "text": "Using malloc() pero without free()...",
+      "type": "incomplete",
+      "category": "mixed_language",
+      "expected_behaviors": ["handles mixed language", "asks for clarification", "focuses on technical content"],
+      "red_flags": ["ignores mixed language", "assumes meaning", "provides incomplete answer"],
+      "severity": "mild"
+    },
+    {
+      "text": "Before the interrupt after the context switch...",
+      "type": "incomplete",
+      "category": "temporal_confusion",
+      "expected_behaviors": ["identifies temporal confusion", "asks for clarification", "requests proper sequence"],
+      "red_flags": ["assumes meaning", "provides answer anyway", "ignores confusion"],
+      "severity": "moderate"
+    },
+    {
+      "text": "During scheduling while memory allocation...",
+      "type": "incomplete",
+      "category": "temporal_confusion",
+      "expected_behaviors": ["identifies temporal confusion", "asks for clarification", "requests proper sequence"],
+      "red_flags": ["assumes meaning", "provides answer anyway", "ignores confusion"],
+      "severity": "moderate"
+    },
+    {
+      "text": "Between fork() and exec() when signal...",
+      "type": "incomplete",
+      "category": "temporal_confusion",
+      "expected_behaviors": ["identifies temporal confusion", "asks for clarification", "requests completion"],
+      "red_flags": ["assumes meaning", "provides answer anyway", "ignores confusion"],
+      "severity": "moderate"
+    }
+  ]
+   

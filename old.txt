@@ -1,0 +1,26 @@
+# Core LlamaIndex and LangChain
+llama-index
+langchain
+
+# Integration for the LLM (Llama 3 via Ollama)
+llama-index-llms-ollama
+
+# Integration for the Embedding Model (MiniLM via HuggingFace)
+llama-index-embeddings-huggingface
+sentence-transformers
+
+# For Code Parsing
+llama-index-readers-file
+tree-sitter
+tree-sitter-languages
+tree_sitter_language_pack
+
+# For Vector Database (ChromaDB)
+chromadb
+llama-index-vector-stores-chroma
+
+# For document parsing (PDF support)
+pypdf
+
+# For reranking
+llama-index-postprocessor-sentence-transformer-rerank

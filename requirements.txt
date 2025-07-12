@@ -1,0 +1,46 @@
+# Core LlamaIndex and LangChain
+llama-index
+langchain
+
+# Integration for the LLM (Llama 3 via Ollama)
+llama-index-llms-ollama
+
+# Integration for the Embedding Model (MiniLM via HuggingFace)
+llama-index-embeddings-huggingface
+sentence-transformers
+
+# For Code Parsing
+llama-index-readers-file
+tree-sitter
+tree-sitter-languages
+tree_sitter_language_pack
+
+# For Vector Database (ChromaDB)
+chromadb
+llama-index-vector-stores-chroma
+
+# For document parsing (PDF support)
+pypdf
+
+# For reranking (correct package name)
+llama-index-postprocessor-sentencetransformer-rerank
+
+# Additional dependencies for your specific code
+transformers>=4.21.0
+accelerate
+torch
+torchvision
+torchaudio
+
+# For better text processing and tokenization
+tokenizers
+
+# For handling various document formats
+python-docx
+openpyxl
+
+# For progress bars and better UX
+tqdm
+
+# For better error handling and retries
+tenacity
