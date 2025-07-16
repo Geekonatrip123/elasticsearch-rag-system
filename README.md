@@ -22,7 +22,7 @@ git clone <your-repo-url>
 cd elasticsearch-rag-system
 python -m venv environment
 source environment/bin/activate  # On Windows: environment\Scripts\activate
-pip install -r requirements.txt
+pip install -r new_requirements.txt
 ```
 
 ### 2. Start Elasticsearch
